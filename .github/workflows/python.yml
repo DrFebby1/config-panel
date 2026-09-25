@@ -1,0 +1,37 @@
+# Runs the panel's own test suite on every push and pull request.
+# (A Node.js workflow was here before; this project is Python, so `npm ci`
+# failed immediately and CI showed red on every commit.)
+
+name: Python CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.11", "3.12", "3.13" ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      # tests/test_reporter_live.py boots its own throwaway server on a free
+      # port, so it works unchanged on a CI runner.
+      - name: Run tests
+        run: |
+          python tests/test_panel.py
+          python tests/test_reporter_live.py

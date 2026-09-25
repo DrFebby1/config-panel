@@ -14,10 +14,13 @@ RUN pip install --no-cache-dir --upgrade pip \
 
 COPY . .
 
-# Railway mounts a volume here. Without a volume the SQLite file is reset on
-# every deploy, so this directory is where all state lives.
+# Persistence is provided by a Railway volume mounted at /data, attached in
+# the service's dashboard settings. The native Docker instruction for volumes
+# is deliberately not used here because Railway's builder (Railpack) rejects
+# it. Without an attached volume the SQLite database lives inside the
+# container layer and is reset on every deploy - so create the volume in the
+# dashboard.
 RUN mkdir -p /data
-VOLUME ["/data"]
 
 EXPOSE 8000
 

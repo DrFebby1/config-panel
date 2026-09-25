@@ -1,0 +1,5 @@
+# Extra dependencies for running the test suite (see .github/workflows/python.yml).
+# Not needed to run the panel itself.
+-r requirements.txt
+# fastapi's TestClient (used by tests/test_panel.py) is built on httpx.
+httpx==0.28.1

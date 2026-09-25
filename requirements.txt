@@ -1,9 +1,18 @@
 # Panel dependencies. Everything else comes from the Python standard library
 # (sqlite3, hashlib, hmac, secrets, zoneinfo), which keeps the Docker build fast
 # and avoids native compilation on Railway.
-fastapi>=0.110,<1.0
-uvicorn>=0.27
-qrcode>=7.4
+#
+# Versions are pinned to the exact combination the test suite is verified
+# against. Loose ranges are not safe here: for example starlette 1.x replaced
+# the package its TestClient depends on, which would break tooling that embeds
+# the app in tests. If you upgrade, re-run tests/test_panel.py first.
+fastapi==0.128.0
+# Pin the HTTP layer explicitly as well: fastapi allows a range of starlette
+# versions, and pinning keeps CI and the Docker image on the exact build the
+# tests ran against.
+starlette==0.50.0
+uvicorn==0.38.0
+qrcode==8.2
 # Guarantees the IANA timezone database exists on slim base images so
 # Asia/Tehran resolves correctly inside the container.
 tzdata

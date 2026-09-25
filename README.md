@@ -82,9 +82,24 @@ http://127.0.0.1:8000/panel
 
 ---
 
-## 📦 گذاشتن روی گیت‌هاب
+## 📦 گذاشتن روی گیت‌هاب (گام به گام)
 
-فایل‌ها آماده‌اند. یک ریپوی خالی در گیت‌هاب بساز و بعد:
+### قدم ۱: ساخت ریپوی خالی
+
+1. برو به **<https://github.com/new>**
+2. فیلد **Repository name** را پر کن، مثلاً `config-panel`
+3. 🔴 **هیچ‌کدام از سه تیک را نزن:**
+   - ❌ *Add a README file*
+   - ❌ *Add .gitignore*
+   - ❌ *Choose a license*
+
+   اگر این تیک‌ها را بزنی، گیتهاب یک کامیت اولیه می‌سازد و push تو با خطای
+   `rejected (fetch first)` رد می‌شود.
+4. دکمهٔ **Create repository** را بزن.
+
+> اگر Private ساختگی، بعداً در Railway باید به آن اجازهٔ دسترسی بدهی (قدم ۳).
+
+### قدم ۲: کامیت و push
 
 ```bash
 git init
@@ -95,8 +110,31 @@ git remote add origin https://github.com/USERNAME/REPO.git
 git push -u origin main
 ```
 
+`USERNAME` و `REPO` را با مقادیر خودت عوض کن — اگر آدرس اشتباه باشد
+گیتهاب می‌گوید `Repository not found`.
+
+اگر git هنوز نام/ایمیل نداشته باشد، اول این را اجرا کن:
+
+```bash
+git config user.name "نام تو"
+git config user.email "you@example.com"
+```
+
+اگر هنگام push رمز خواست، **رمز اکانت گیتهاب قبول نیست**. یک توکن بساز:
+`GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
+→ Generate new token` و تیک **`repo`** را بزن؛ همان توکن را به‌جای رمز وارد کن.
+
 > فایل `.env` و پوشه `data/` در `.gitignore` هستند و بالا نمی‌روند؛ پس رمز و دیتابیس
 > هیچ‌وقت روی گیت‌هاب نمی‌رود.
+
+### عیب‌یابی گیت‌هاب
+
+| خطا | علت و راه‌حل |
+|---|---|
+| `Repository not found` | ریپو ساخته نشده یا آدرس remote اشتباه است. با `git remote -v` چک کن و با `git remote set-url origin …` درستش کن |
+| `rejected (fetch first)` | ریپو خالی نیست (README تیک خورده بوده). `git pull --rebase origin main` و بعد دوباره push |
+| `Authentication failed` | رمز اکانت کار نمی‌کند؛ توکن با تیک `repo` بساز |
+| `error: remote origin already exists` | داری origin را دوباره add می‌کنی؛ برای تغییر آدرس از `git remote set-url` استفاده کن |
 
 ---
 
@@ -105,6 +143,8 @@ git push -u origin main
 ### ۱. پروژه را وصل کن
 1. برو به <https://railway.app> و با گیت‌هاب وارد شو.
 2. **New Project** → **Deploy from GitHub repo** → ریپوی خودت را انتخاب کن.
+   - اگر ریپو را Private ساخته‌ای و لیست نیست: دکمهٔ *Configure GitHub App* را بزن
+     و به Railway اجازهٔ دسترسی به آن ریپو بده.
 3. Railway فایل `Dockerfile` را خودش پیدا می‌کند و می‌سازد.
 
 ### ۲. 🔴 حتماً Volume بساز (مهم‌ترین قدم)
@@ -114,6 +154,10 @@ git push -u origin main
 2. مسیر mount را بگذار: `/data`
 
 پنل به‌صورت پیش‌فرض دیتابیس را در `/data` می‌سازد، پس همین یک قدم کافی است.
+
+> داکرفایل عمداً دستور Docker برای Volume ندارد؛ بیلدرِ Railway (Railpack) آن را
+> رد می‌کند با خطای `docker VOLUME ... is not supported`. پس Volume باید از داشبورد
+> وصل شود، نه از داخل ایمیج.
 
 ### ۳. متغیرها را ست کن
 تب **Variables** → **New Variable**:
@@ -141,6 +185,15 @@ git push -u origin main
 - بعد از ست‌کردن `PUBLIC_BASE_URL` یک بار **Redeploy** کن تا مطمئن شوی اعمال شده.
 - اگر رمز مدیرت را فراموش کردی، متغیر `ADMIN_PASSWORD_RESET=1` را ست کن، یک بار دیگر دیپلوی کن،
   بعد آن را حذف کن.
+
+### عیب‌یابی Railway
+
+| خطا | علت و راه‌حل |
+|---|---|
+| `docker VOLUME ... is not supported` | نسخهٔ قدیمی داکرفایل را داری؛ آپدیت کن (این مشکل در نسخهٔ فعلی رفع شده) |
+| Build شد ولی صفحه نمی‌آید | لاگ را ببین: Deployments → View Logs. مسیر پنل `/panel` است، نه `/` |
+| `healthcheck failed` | اولین اجرا کمی طول می‌کشد؛ یک بار **Redeploy** کن. اگر تکرار شد لاگ را بفرست |
+| کاربران بعد از هر دیپلوی پاک می‌شوند | Volume وصل نشده یا mount path آن `/data` نیست |
 
 ---
 
@@ -244,11 +297,14 @@ tests/           تست‌ها
 ## ✅ تست‌ها
 
 ```bash
+pip install -r requirements-dev.txt   # شامل وابستگی‌های تست
 python tests/test_panel.py           # ۱۵۴ تست API و منطق پنل
 python tests/test_reporter_live.py   # ۳۰ تست اجرای واقعی اسکریپت مصرف
 ```
 
 تست‌ها روی یک دیتابیس موقت اجرا می‌شوند و به دیتابیس اصلی دست نمی‌زنند.
+هروقت push کنی، GitHub Actions همین دو مجموعه را روی Python‌های ۳.۱۱ تا ۳.۱۳ اجرا می‌کند
+(تنظیمات در `.github/workflows/python.yml`).
 
 ---
 
@@ -286,3 +342,11 @@ Volume نساخته‌ای یا روی `/data` mount نکرده‌ای.
 
 **صفحه سفید می‌آید.**
 کنسول مرورگر را ببین. اگر کوکی را پاک کرده‌ای، سشن منقضی شده و باید دوباره وارد شوی.
+
+**خطای build در Railway یا CI.**
+اول مطمئن شو آخرین نسخه را push کرده‌ای. اگر باز هم خطا بود، متن کامل خطا را از
+Deployments → View Logs (یا تب Actions در گیت‌هاب) کپی کن.
+
+**خطای `httpx2` یا ورژن پکیج‌ها در تست.**
+نسخه‌های `requirements.txt` پین شده‌اند تا CI و Docker دقیقاً همان ترکیبی را بگیرند که
+تست شده. اگر خودت دستی آپگرید کردی، اول تست‌ها را اجرا کن.
