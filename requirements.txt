@@ -1,0 +1,9 @@
+# Panel dependencies. Everything else comes from the Python standard library
+# (sqlite3, hashlib, hmac, secrets, zoneinfo), which keeps the Docker build fast
+# and avoids native compilation on Railway.
+fastapi>=0.110,<1.0
+uvicorn>=0.27
+qrcode>=7.4
+# Guarantees the IANA timezone database exists on slim base images so
+# Asia/Tehran resolves correctly inside the container.
+tzdata

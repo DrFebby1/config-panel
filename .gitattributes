@@ -1,0 +1,11 @@
+# This project is built and run inside a Linux container on Railway.
+# A CRLF in the Dockerfile turns `RUN ... \` continuations into invalid
+# instructions and a CRLF in the Procfile corrupts the start command, so the
+# working tree is forced to LF everywhere.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff binary
+*.woff2 binary

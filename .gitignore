@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Local virtualenv
+.venv/
+venv/
+
+# Secrets & local config
+.env
+
+# Runtime data: the SQLite database must never be committed
+data/
+*.db
+*.db-wal
+*.db-shm
+tmp/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Agent/tool metadata
+.freebuff/

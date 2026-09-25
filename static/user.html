@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>اطلاعات کانفیگ من</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="portal">
+
+  <div class="portal-head">
+    <div class="brand"><span class="dot">CP</span><span id="brand-name">کانفیگ من</span></div>
+    <span class="spacer"></span>
+    <button class="btn sm ghost" id="refresh-btn">بروزرسانی</button>
+  </div>
+
+  <div id="loading" class="empty">در حال بارگذاری…</div>
+  <div id="error-box" class="blocked-note hidden"></div>
+  <div id="content" class="hidden"></div>
+
+  <p class="muted small center" style="margin-top:1.5rem">
+    این صفحه لینک اختصاصی شماست؛ آن را در اختیار کسی نگذارید.
+    <span id="support-slot"></span>
+  </p>
+</div>
+
+<div id="toast-root"></div>
+<script src="/static/user.js"></script>
+</body>
+</html>

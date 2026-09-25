@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>پنل مدیریت کانفیگ</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- ===================== ورود / ساخت مدیر ===================== -->
+<div id="auth-view" class="auth-wrap hidden">
+  <div class="auth-card">
+    <div class="auth-logo">CP</div>
+    <h1 id="auth-title">ورود به پنل</h1>
+    <p class="muted small" id="auth-sub">برای مدیریت کانفیگ‌ها وارد شوید.</p>
+
+    <form id="auth-form" autocomplete="on">
+      <label class="field">
+        <span>نام کاربری</span>
+        <input id="auth-username" name="username" autocomplete="username" required>
+      </label>
+      <label class="field">
+        <span id="auth-pass-label">رمز عبور</span>
+        <input id="auth-password" name="password" type="password"
+               autocomplete="current-password" minlength="6" required>
+      </label>
+      <div id="auth-err" class="err"></div>
+      <button class="btn primary block" id="auth-submit" type="submit">ورود</button>
+    </form>
+
+    <p class="muted small mt" style="margin-top:1rem">
+      این پنل برای ساخت و مدیریت کانفیگ است. اگر کاربری لینک اختصاصی خود را گم کرد،
+      از بخش «کاربران ← جزئیات ← لینک جدید» یک لینک تازه برایش بساز.
+    </p>
+  </div>
+</div>
+
+<!-- ===================== پنل ===================== -->
+<div id="app-view" class="hidden">
+  <header class="topbar">
+    <div class="brand"><span class="dot">CP</span><span id="brand-name">پنل مدیریت کانفیگ</span></div>
+    <nav class="nav" id="nav">
+      <button data-view="dashboard" class="active">داشبورد</button>
+      <button data-view="users">کاربران</button>
+      <button data-view="servers">سرورها</button>
+      <button data-view="settings">تنظیمات</button>
+    </nav>
+    <span class="spacer"></span>
+    <span class="muted small nowrap" id="whoami"></span>
+    <button class="btn sm ghost" id="logout-btn">خروج</button>
+  </header>
+
+  <main class="wrap">
+    <section id="view-dashboard"></section>
+    <section id="view-users" class="hidden"></section>
+    <section id="view-servers" class="hidden"></section>
+    <section id="view-settings" class="hidden"></section>
+  </main>
+</div>
+
+<div id="modal-root"></div>
+<div id="toast-root"></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
